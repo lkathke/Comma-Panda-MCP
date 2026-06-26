@@ -1,10 +1,10 @@
 {
   "mcpServers": {
     "panda": {
-      "command": "C:\\Users\\lkathke\\source\\other\\panda-mcp\\.venv\\Scripts\\python.exe",
+      "command": "C:\\Users\\lasse\\source\\others\\Comma-Panda-MCP\\.venv\\Scripts\\python.exe",
       "args": ["-m", "panda_mcp.server"],
       "env": {
-        "PYTHONPATH": "C:\\Users\\lkathke\\source\\other\\panda-mcp\\src"
+        "PYTHONPATH": "C:\\Users\\lasse\\source\\others\\Comma-Panda-MCP\\src"
       }
     }
   }

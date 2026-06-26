@@ -44,9 +44,15 @@ def device_status() -> dict:
 
 @mcp.tool()
 def device_set_safety_mode(mode: str) -> dict:
-    """Set the safety mode. 'silent' = listen only (default, safe).
-    'alloutput' = UNLOCKS transmitting arbitrary frames on any bus. Required
-    before send_*/fuzz/replay. Only use alloutput on a bench or a car you own."""
+    """Set the safety mode.
+
+    'silent'          - listen only (default, safe)
+    'alloutput'       - UNLOCKED: transmit arbitrary frames on any bus (no safety checks)
+    'volkswagen_mqb'  - Old MQB (Golf 7, Passat B8): torque-based, mode 15
+    'volkswagen_meb'  - MEB + MQB Evo (Golf 8, Cupra Leon 2021, ID.3/ID.4): mode 34
+                        curvature-based HCA_03, check_relay for camera relay blocking.
+                        Requires ALLOW_DEBUG firmware (firmware/panda_h7.bin.signed).
+                        TX only works while vehicle sends Motor_51 with ACC engaged."""
     key = mode.lower()
     if key not in SAFETY_MODES:
         return {"error": f"unknown mode '{mode}'. options: {', '.join(SAFETY_MODES)}"}

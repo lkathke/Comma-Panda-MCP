@@ -10,7 +10,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # Hardware support. Without this the server runs in mock mode only.
-panda = ["pandacan>=0.0.10"]
+panda = ["pandacan>=0.0.9"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]

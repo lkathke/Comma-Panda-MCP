@@ -18,12 +18,26 @@ import threading
 import time
 
 # Safety mode constants mirrored from panda so callers don't need the package.
-SAFETY_SILENT = 0      # listen only, cannot transmit
-SAFETY_ALLOUTPUT = 17  # unlocked: can transmit arbitrary frames on any bus
+SAFETY_SILENT = 0            # listen only, cannot transmit
+SAFETY_ALLOUTPUT = 17        # unlocked: can transmit arbitrary frames on any bus
+SAFETY_VOLKSWAGEN_MQB = 15   # old MQB (Golf 7, Passat B8) — torque-based
+SAFETY_VOLKSWAGEN_MEB = 34   # MEB + MQB Evo (Golf 8, Cupra Leon, ID.3/ID.4)
+                             # curvature-based, HCA_03 with check_relay
+
+# Safety mode param flags (passed as second arg to set_safety_mode)
+FLAG_VW_LONG_CONTROL = 1     # enable longitudinal control (ACC_18 TX)
+FLAG_VW_BENCH_TEST   = 2     # skip controls_allowed for HCA_03 — stationary testing only
+                             # REQUIRES ALLOW_DEBUG firmware (firmware/panda_h7.bin.signed)
+                             # Use: set_safety_mode(SAFETY_VOLKSWAGEN_MEB, param=FLAG_VW_BENCH_TEST)
+
+# Modes that are allowed to transmit (for mock enforcement)
+_TX_MODES = {SAFETY_ALLOUTPUT, SAFETY_VOLKSWAGEN_MQB, SAFETY_VOLKSWAGEN_MEB}
 
 SAFETY_MODES = {
-    "silent": SAFETY_SILENT,
-    "alloutput": SAFETY_ALLOUTPUT,
+    "silent":          SAFETY_SILENT,
+    "alloutput":       SAFETY_ALLOUTPUT,
+    "volkswagen_mqb":  SAFETY_VOLKSWAGEN_MQB,
+    "volkswagen_meb":  SAFETY_VOLKSWAGEN_MEB,
 }
 
 
@@ -74,9 +88,10 @@ class MockPanda:
         self._speeds[bus] = speed
 
     def can_send(self, arb_id: int, data: bytes, bus: int) -> None:
-        if self._safety != SAFETY_ALLOUTPUT:
+        if self._safety not in _TX_MODES:
             raise DeviceError(
-                "cannot send: safety mode is not ALLOUTPUT (call device_set_safety_mode)"
+                "cannot send: safety mode does not allow TX "
+                "(use alloutput, volkswagen_meb, or volkswagen_mqb_evo)"
             )
         self._sent.append((arb_id, bytes(data), bus))
 
