@@ -34,7 +34,7 @@ def main() -> None:
     print()
     print("Xbox-Erwartung:")
     print("  Axis 0  = Linker Stick X  (-1=links, +1=rechts)")
-    print("  Axis 2  = Linker Trigger  (-1=los,   +1=voll)")
+    print("  Axis 4  = Linker Trigger  (-1=los,   +1=voll)")
     print("  Axis 5  = Rechter Trigger (-1=los,   +1=voll)")
     print("  Button 0 = A,  Button 1 = B")
     print()
@@ -49,7 +49,7 @@ def main() -> None:
             btns = [joy.get_button(i) for i in range(joy.get_numbuttons())]
 
             steer  = axes[0] if len(axes) > 0 else 0.0
-            lt     = normalize_trigger(axes[2]) if len(axes) > 2 else 0.0
+            lt     = normalize_trigger(axes[4]) if len(axes) > 4 else 0.0
             rt     = normalize_trigger(axes[5]) if len(axes) > 5 else 0.0
             btn_a  = btns[0] if len(btns) > 0 else 0
             btn_b  = btns[1] if len(btns) > 1 else 0

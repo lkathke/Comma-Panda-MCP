@@ -237,7 +237,7 @@ def main() -> None:
     print(f"Controller: {joy.get_name()}")
     print("  Linker Stick X   -> Lenkung")
     print("  Rechter Trigger  -> Gas    (Axis 5)")
-    print("  Linker Trigger   -> Bremse (Axis 2)")
+    print("  Linker Trigger   -> Bremse (Axis 4)")
     print("  A (Button 0)     -> Aktivieren")
     print("  B (Button 1)     -> Deaktivieren")
     print("  Ctrl+C           -> Beenden")
@@ -276,7 +276,7 @@ def main() -> None:
 
             # Beschleunigung: Trigger
             rt = trigger_value(joy.get_axis(5))  # Rechter Trigger -> Gas
-            lt = trigger_value(joy.get_axis(2))  # Linker Trigger  -> Bremse
+            lt = trigger_value(joy.get_axis(4))  # Linker Trigger  -> Bremse
             if active:
                 accel = rt * ACCEL_MAX - lt * abs(ACCEL_MIN)
                 accel = max(ACCEL_MIN, min(ACCEL_MAX, accel))
